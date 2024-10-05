@@ -1,53 +1,81 @@
+//import react into the bundle
 import React from "react";
 import ReactDOM from "react-dom/client";
 
+// include your styles into the webpack bundle
 import "../styles/index.css";
+
+//import your own components
 import Home from "./component/home.jsx";
 
-let seconds = 0;
-let processInterval;
-let userInput = null; // Variable global para almacenar el valor ingresado por el usuario
+let digitone = 0;
+let digittwo = 0;
+let digitthree = 0;
+let digitfour = 0;
+let digitfive = 0;
+
+let intervalId = null;
+
 const root = ReactDOM.createRoot(document.getElementById('app'));
 
-const Stop = () => {
-    clearInterval(processInterval);
+const startCounter = () => {
+    if (!intervalId) {
+        intervalId = setInterval(function () {
+            digitone++;
+
+            if (digitone === 10) {
+                digitone = 0;
+                digittwo++;
+            }
+            if (digittwo === 6) {
+                digittwo = 0;
+                digitthree++;
+            }
+            if (digitthree === 6) {
+                digitthree = 0;
+                digitfour++;
+            }
+            if (digitfour === 6) {
+                digitfour = 0;
+                digitfive++;
+            }
+            if (digitfive === 10) {
+                digitfive = 0;
+            }
+
+            // Renderiza el componente Home con los valores actualizados
+            root.render(
+                <Home
+                    digitOne={digitone}
+                    digitTwo={digittwo}
+                    digitThree={digitthree}
+                    digitFour={digitfour}
+                    digitFive={digitfive}
+                    stopCounter={stopCounter}
+                    startCounter={startCounter}
+                />
+            );
+
+        }, 1000);
+    }
 };
 
-const interval = function () {
-    processInterval = setInterval(function () {
-        if (userInput !== null && seconds === userInput) {
-            console.log("si aparece esto es que la alerta funciona")
-            alert("Time reached: " + userInput + " seconds");
-            Stop();
-        }
-
-        const digitfive = Math.floor(seconds / 10000);
-        const digitfour = Math.floor(seconds / 1000);
-        const digitthree = Math.floor(seconds / 100);
-        const digittwo = Math.floor(seconds / 10);
-        const digitone = Math.floor(seconds / 1);
-
-        root.render(
-            <Home
-                digitOne={digitone % 10}
-                digitTwo={digittwo % 10}
-                digitThree={digitthree % 10}
-                digitFour={digitfour % 10}
-                digitFive={digitfive % 10}
-                Stop={Stop}
-                Resume={Resume}
-                setUserInput={(value) => {
-                    userInput = value;
-                }}
-            />
-        );
-
-        seconds++;
-    }, 1000);
+const stopCounter = () => {
+    clearInterval(intervalId);
+    intervalId = null;
 };
 
-interval();
+// Renderiza el componente Home inicialmente
+root.render(
+    <Home
+        digitOne={digitone}
+        digitTwo={digittwo}
+        digitThree={digitthree}
+        digitFour={digitfour}
+        digitFive={digitfive}
+        stopCounter={stopCounter}
+        startCounter={startCounter}
+    />
+);
 
-const Resume = () => {
-    interval();
-};
+startCounter();
