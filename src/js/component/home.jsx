@@ -12,6 +12,14 @@ const Home = (props) => {
             <div id="two" className="col column">{props.digitTwo}</div>
             <div id="one" className="col column">{props.digitOne}</div>
         </div>
+        <div className ="row divcontainer">
+            <div className="col column2" ></div>
+            <div className="col column2">Horas</div>
+            <div className="col column2" >Minutos</div> 
+            <div className="col column2" >Minutos </div> 
+            <div className="col column2" >Segundos</div> 
+            <div className="col column2" >Segundos</div>
+        </div>
         <button className="btn btn-danger" onClick={props.stopCounter}>Detener Contador</button>
         <button className="btn btn-success" onClick={props.startCounter}>Iniciar/Resumir Contador</button>
         </>
